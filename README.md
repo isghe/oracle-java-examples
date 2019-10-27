@@ -2,6 +2,20 @@
 
 Simple examples, showing how to connect to ORACLE DB, with Java ojdbc driver, and how to make inserts without polluting ORACLE environment.
 
+It's important to understand that polluting the ORACLE environment, without closing the opened connection, at the end, it will lock the system.
+
+# Table of contents
+* [Examples](#examples)
+* [Install](#install)
+* [Configure](#configure)
+* [Compile](#compile)
+* [Run](#run)
+* [Monitor](#monitor)
+* [License](#license)
+* [Disclaimer](#disclaimer)
+* [Donations](#donations)
+
+# Examples
 The examples are:
 * `HelloWorld`:
 Just a simple query to table `DUAL`;
@@ -41,3 +55,15 @@ MonitorWrongWay,: 61 SESSIONS_PER_USER polluting ORACLE environment:
 
 MonitorCorrectWay: just 3 SESSIONS_PER_USER:
 ![WrongWay](images/MonitorCorrectWay.png "CorrectgWay")
+
+# License
+This is, for now, has no `License` product, or… TODO: find a good license for this product.
+
+# Disclaimer
+ My natural language is italian. Don't use this repo in production, it's only a SCOLASTICO, ACCADEMICO collections of examples; production is another layer.
+ Don't use Java in critical situations.
+
+# Donations
+ Donations are welcome at Bitcoin address: `1Java1MmYqF3hTQmvwjtT3k8Dbc6HHd7Tv`
+
+<div style="text-align: right">Almaty, Kazakistan, 28 Ottobre 2019<br>Isidoro Ghezzi</div>

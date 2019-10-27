@@ -32,3 +32,12 @@ Copy `Configure/Credentials-template.java` to `Configure/Credentials.java` and m
 
 # Run
 `. ../../script/run.sh`
+
+# Monitor
+To monitor the SESSIONS_PER_USER execute the query in `sql/sessions_per_user.sql`
+
+MonitorWrongWay,: 61 SESSIONS_PER_USER polluting ORACLE environment:
+![WrongWay](images/MonitorWrongWay.png "WrongWay")
+
+MonitorCorrectWay: just 3 SESSIONS_PER_USER:
+![WrongWay](images/MonitorCorrectWay.png "CorrectgWay")

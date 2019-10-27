@@ -10,7 +10,9 @@ class Main{
 		Connection conn = null;
 		try{
 			// open the connection only one time.
-			conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password);;
+			System.out.println("Opening the connection");
+			conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password);
+			System.out.println("Connection opened");
 			assert null != conn: "conn is null";
 			for (int i = 0; i < 60; ++i){
 				try{
@@ -22,18 +24,19 @@ class Main{
 					System.out.println("insertSql: " + sql);
 					statement.executeUpdate(sql);  
 					statement.close();
-					System.err.format("commit\n");
+					System.out.println("committing");
 					conn.commit ();
+					System.out.println("committed");
 					java.lang.Thread.sleep(1000);
 				} catch (SQLException e) {
-					System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+					System.err.format("SQL State: %s - %s\n", e.getSQLState(), e.getMessage());
 					try{
 						if(conn!=null){
 							System.err.format("rolling back\n");
 							conn.rollback();
 						}
-					}catch(SQLException se2){
-						System.err.format("SQL State se2: %s\n%s", se2.getSQLState(), se2.getMessage());
+					} catch(SQLException se2){
+						System.err.format("SQL State se2: %s - %s\n", se2.getSQLState(), se2.getMessage());
 						se2.printStackTrace();
 					}
 				} catch (Exception e) {
@@ -41,16 +44,19 @@ class Main{
 				}
 			}
 		} catch (SQLException e){
-			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+			System.err.format("SQL State: %s - %s\n", e.getSQLState(), e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
 			try{
 				if(conn!=null){
-					conn.close(); // close the connection only one time, because it was opened only one time.
+					// close the connection only one time, because it was opened only one time.
+					System.out.println("Closing the connection");
+					conn.close ();
+					System.out.println("Connection closed");
 				}
-			}catch(SQLException se2){
-				System.err.format("SQL State se2: %s\n%s", se2.getSQLState(), se2.getMessage());
+			} catch(SQLException se2){
+				System.err.format("SQL State se2: %s - %s\n", se2.getSQLState(), se2.getMessage());
 				se2.printStackTrace();
 			}
 		}

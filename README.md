@@ -6,11 +6,11 @@ The examples are:
 * `HelloWorld`:
 Just a simple query to table `DUAL`;
 * `WrongWay`:
-Inserting data in table `TEST_INSERT`, in wrong way: opens the connection for each insert, without closing the connection. Because of that it's polluting the ORACLE environment with tons of SESSIONS_PER_USER, until the system resources run out!
+Inserts data in table `TEST_INSERT`, in wrong way: opens the connection for each insert, without closing the connection. Because of that it's polluting the ORACLE environment with tons of SESSIONS_PER_USER, until the system resources run out!
 * `CorrectWay`:
 Just closes the balanced connection with the open ones. At least it's not polluting the ORACLE environment; but it's unnecessary opening and closing the connection for each insert;
 * `GoodWay`:
-Opens the connection to ORACLE only on time, closing it one time at the end of the program;
+Opens the connection to ORACLE only on time, closing it only one time at the end of the program;
 * `BetterWay`:
 One connection, one commit. (making on commit, it depends on what you need).
 

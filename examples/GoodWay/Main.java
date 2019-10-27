@@ -11,9 +11,9 @@ class Main{
 		try{
 			// open the connection only one time.
 			conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password);;
+			assert null != conn: "conn is null";
 			for (int i = 0; i < 60; ++i){
 				try{
-					assert null != conn: "conn is null";
 					conn.setAutoCommit(false);
 					Statement statement = null;
 					statement = conn.createStatement();
@@ -27,6 +27,15 @@ class Main{
 					java.lang.Thread.sleep(1000);
 				} catch (SQLException e) {
 					System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+					try{
+						if(conn!=null){
+							System.err.format("rolling back\n");
+							conn.rollback();
+						}
+					}catch(SQLException se2){
+						System.err.format("SQL State se2: %s\n%s", se2.getSQLState(), se2.getMessage());
+						se2.printStackTrace();
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

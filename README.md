@@ -1,21 +1,21 @@
 # Oracle Java Examples
 
-Simple examples, showing how to connect to ORACLE DB, with Java ojdbc driver, and how to make inserts without polluting ORACLE environment.
+Simple examples, showing how to connect to ORACLE DB, with Java `ojdbc` driver, and how to make inserts without polluting ORACLE environment.
 
 It's important to understand that polluting the ORACLE environment, without closing the opened connection, at the end, it will lock the system.
 
-# Table of contents
+## Table of contents
 * [Examples](#examples)
+* [Compatibility](#compatibility)
 * [Install](#install)
 * [Configure](#configure)
 * [Compile](#compile)
 * [Run](#run)
 * [Monitor](#monitor)
-* [License](#license)
 * [Disclaimer](#disclaimer)
 * [Donations](#donations)
 
-# Examples
+## Examples
 The examples are:
 * `HelloWorld`:
 Just a simple query to table `DUAL`;
@@ -26,28 +26,40 @@ Just closes the balanced connection with the open ones. At least it's not pollut
 * `GoodWay`:
 Opens the connection to ORACLE only on time, closing it only one time at the end of the program;
 * `BetterWay`:
-One connection, one commit. (making on commit, it depends on what you need).
+One connection, one commit.
 
-# Install
+## Compatibility
+
+Tested on:
+
+* `macOS Mojave 10.14.6`
+	* java: `1.8.0_66`
+	* javac: `1.8.0_66`
+* `Oracle Linux Server 7.5`
+	* `Oracle Database 18c Express Edition`
+	* java: `1.8.0_151`
+	* javac `1.8.0_151`
+
+## Install
 
 Download `ojdbc7.jar` from [jdbc-drivers-12c-downloads](https://www.oracle.com/database/technologies/jdbc-drivers-12c-downloads.html) and copy it in `lib/` folder.
 
 To run the examples `WrongWay`, `CorrectWay`, `GoodWay`, `BetterWay`, execute the script in `sql/create-table_test_insert.sql`; it will create the table `TEST_INSERT` in your DB.
 
-# Configure
+## Configure
 
 Copy `Configure/Credentials-template.java` to `Configure/Credentials.java` and modify the credentials you need (url, user and password).
 
-# Compile
+## Compile
 
 `$ cd examples/HelloWorld`
 
 `$ . ../../script/compile.sh`
 
-# Run
+## Run
 `. ../../script/run.sh`
 
-# Monitor
+## Monitor
 To monitor the SESSIONS_PER_USER execute the query in `sql/sessions_per_user.sql`
 
 MonitorWrongWay,: 61 SESSIONS_PER_USER polluting ORACLE environment:
@@ -56,14 +68,11 @@ MonitorWrongWay,: 61 SESSIONS_PER_USER polluting ORACLE environment:
 MonitorCorrectWay: just 3 SESSIONS_PER_USER:
 ![WrongWay](images/MonitorCorrectWay.png "CorrectgWay")
 
-# License
-This is, for now, has no `License` product, or… TODO: find a good license for this product.
+## Disclaimer
+ Don't use this repo in production, it's only an academic collection of examples; production is on another layer.
+ Use at your own risk.
 
-# Disclaimer
- My natural language is italian. Don't use this repo in production, it's only a SCOLASTICO, ACCADEMICO collections of examples; production is another layer.
- Don't use Java in critical situations.
-
-# Donations
+## Donations
  Donations are welcome at Bitcoin address: `1Java1MmYqF3hTQmvwjtT3k8Dbc6HHd7Tv`
 
-<div style="text-align: right">Almaty, Kazakistan, 28 Ottobre 2019<br>Isidoro Ghezzi</div>
+<div style="text-align: right; align:right">Almaty, Kazakistan, 28 Ottobre 2019<br>Isidoro Ghezzi</div>

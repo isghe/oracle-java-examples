@@ -11,7 +11,7 @@ class Main{
 			// Load Oracle JDBC Driver
 			// DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 			System.out.println("HelloWorld");
-			System.out.println("Try connecting to: " + Credentials.url);
+			System.out.println("Try connecting to: " + Credentials.url + " with user: " + Credentials.user);
 			Connection conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password);
 			assert null != conn: "conn is null";
 			System.out.println("Connected to the database!");

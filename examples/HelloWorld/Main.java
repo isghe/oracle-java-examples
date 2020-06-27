@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import configuration.Credentials;
 
 class Main{
 // https://www.oracle.com/database/technologies/jdbc-drivers-12c-downloads.html 

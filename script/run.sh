@@ -1,1 +1,1 @@
-java -cp "../../lib/ojdbc7.jar:../../Configuration:." -ea Main
+java -cp "../../lib/ojdbc7.jar:../../configuration:." -ea Main

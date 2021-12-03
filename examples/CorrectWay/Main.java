@@ -2,27 +2,28 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import configuration.Credentials;
 
 class Main{
 	public static void main(String args[]){
-		final String exampleName = "CorrectWay";
-		System.out.println(exampleName);
 		for (int i = 0; i < 60; ++i){
 			Connection conn = null;
 			try{
+				final String exampleName = "CorrectWay ";
+				System.out.println(exampleName);
 				System.out.println("Opening the connection");
 				conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password);
 				System.out.println("Connection opened");
 
 				assert null != conn: "conn is null";
 				conn.setAutoCommit(false);
-				Statement statement = null;
-				statement = conn.createStatement();
 				String sql = "INSERT INTO TEST_INSERT (id, description) " +
-					"VALUES ((select nvl (max(id), 0) + 1 from TEST_INSERT), '"+exampleName+" "+(i+1)+"')";
+					"VALUES ((select nvl (max(id), 0) + 1 from TEST_INSERT), ? || (select nvl (max(id), 0) + 1 from TEST_INSERT))";
+				PreparedStatement statement = conn.prepareStatement (sql);
+				statement.setString (1, exampleName);
 				System.out.println("insertSql: " + sql);
-				statement.executeUpdate(sql);  
+				statement.executeUpdate();
 				statement.close();
 				System.out.println("committing");
 				conn.commit ();

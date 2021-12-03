@@ -16,7 +16,8 @@ class Main{
 			conn.setAutoCommit(false);
 			Savepoint savepoint = conn.setSavepoint (); // 99999 - could not set a Savepoint with auto-commit on
 			final String sql = "INSERT INTO TEST_INSERT (id, description) " +
-				"VALUES ((select nvl (max(id), 0) + 1 from TEST_INSERT), ? || (select nvl (max(id), 0) + 1 from TEST_INSERT))";
+				"with max_id as (select nvl (max(id), 0) + 1 id from TEST_INSERT) " +
+				"select id, ? || id from max_id";
 			try (PreparedStatement statement = conn.prepareStatement (sql)){
 				System.out.println("AutoCloseable PreparedStatement opened");
 				for (int i = 0; i < 60; ++i){

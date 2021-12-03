@@ -11,17 +11,17 @@ class Main{
 		// N connection, N PreparedStatement, N insert, N commit, N PreparedStatement.Autoclose, N Connection.AutoClose
 		final String exampleName = "CorrectWay ";
 		for (int i = 0; i < 60; ++i){
-			java.lang.Thread.sleep(1000);
 			System.out.println(exampleName);
 			System.out.println("Opening the connection");
-
 			try (Connection conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password)){
+				java.lang.Thread.sleep(1000);
 				System.out.println("Autocloseable Connection opened");
 				assert null != conn: "conn is null";
 				conn.setAutoCommit(false);
 				Savepoint savepoint = conn.setSavepoint (); // 99999 - could not set a Savepoint with auto-commit on
 				final String sql = "INSERT INTO TEST_INSERT (id, description) " +
-					"VALUES ((select nvl (max(id), 0) + 1 from TEST_INSERT), ? || (select nvl (max(id), 0) + 1 from TEST_INSERT))";
+					"with max_id as (select nvl (max(id), 0) + 1 id from TEST_INSERT) " +
+					"select id, ? || id from max_id";
 				try (PreparedStatement statement = conn.prepareStatement (sql)){
 					System.out.println("Autocloseable PreparedStatement opened");
 					statement.setString (1, exampleName);

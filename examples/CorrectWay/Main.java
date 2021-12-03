@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.sql.Savepoint;
 import configuration.Credentials;
 
 class Main{
@@ -17,6 +18,7 @@ class Main{
 				java.lang.Thread.sleep(1000);
 				assert null != conn: "conn is null";
 				conn.setAutoCommit(false);
+				Savepoint savepoint = conn.setSavepoint (); // 99999 - could not set a Savepoint with auto-commit on
 				final String sql = "INSERT INTO TEST_INSERT (id, description) " +
 					"VALUES ((select nvl (max(id), 0) + 1 from TEST_INSERT), ? || (select nvl (max(id), 0) + 1 from TEST_INSERT))";
 				try (PreparedStatement statement = conn.prepareStatement (sql)){
@@ -30,14 +32,14 @@ class Main{
 					System.err.format("inner SQL State: %s - %s\n", e.getSQLState(), e.getMessage());
 					// from https://docs.oracle.com/javase/7/docs/api/java/sql/Connection.html#close()
 					// It is strongly recommended that an application explicitly commits or rolls back an active transaction prior to calling the close method. If the close method is called and there is an active transaction, the results are implementation-defined.
-					conn.rollback();
+					conn.rollback(savepoint);
 					e.printStackTrace();
 				}
 				catch (Exception e){
 					System.err.format("inner State: - %s\n", e.getMessage());
 					// from https://docs.oracle.com/javase/7/docs/api/java/sql/Connection.html#close()
 					// It is strongly recommended that an application explicitly commits or rolls back an active transaction prior to calling the close method. If the close method is called and there is an active transaction, the results are implementation-defined.
-					conn.rollback();
+					conn.rollback(savepoint);
 					e.printStackTrace();
 				}
 			}

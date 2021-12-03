@@ -6,11 +6,13 @@ import configuration.Credentials;
 
 class Main{
 	public static void main(String args[]){
+		// N connection, N insert, N commit
 		final String exampleName = "WrongWay";
 		System.out.println(exampleName);
 		for (int i = 0; i < 60; ++i){
 			Connection conn = null;
 			try{
+				java.lang.Thread.sleep(1000);
 				System.out.println("Opening the connection");
 				conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password);
 				assert null != conn: "conn is null";
@@ -26,7 +28,6 @@ class Main{
 				System.out.println("committing");
 				conn.commit ();
 				System.out.println("committed");
-				java.lang.Thread.sleep(1000);
 			} catch (SQLException e) {
 				System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
 				try{

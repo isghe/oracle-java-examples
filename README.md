@@ -24,7 +24,7 @@ Inserts data in table `TEST_INSERT`, in wrong way: opens the connection for each
 * `CorrectWay`:
 Just closes the balanced connection with the open ones. At least it's not polluting the ORACLE environment; but it's unnecessary opening and closing the connection for each insert;
 * `GoodWay`:
-Opens the connection to ORACLE only on time, closing it only one time at the end of the program;
+Opens the connection to ORACLE only one time, closing it only one time at the end of the program;
 * `BetterWay`:
 One connection, one commit.
 

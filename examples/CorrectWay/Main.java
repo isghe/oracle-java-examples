@@ -8,14 +8,15 @@ import configuration.Credentials;
 
 class Main{
 	public static void main(String args[]){
+		// N connection, N PreparedStatement, N insert, N commit, N PreparedStatement.Autoclose, N Connection.AutoClose
+		final String exampleName = "CorrectWay ";
 		for (int i = 0; i < 60; ++i){
-			final String exampleName = "CorrectWay ";
+			java.lang.Thread.sleep(1000);
 			System.out.println(exampleName);
 			System.out.println("Opening the connection");
 
 			try (Connection conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password)){
 				System.out.println("Autocloseable Connection opened");
-				java.lang.Thread.sleep(1000);
 				assert null != conn: "conn is null";
 				conn.setAutoCommit(false);
 				Savepoint savepoint = conn.setSavepoint (); // 99999 - could not set a Savepoint with auto-commit on

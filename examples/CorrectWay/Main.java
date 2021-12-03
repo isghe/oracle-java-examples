@@ -8,43 +8,45 @@ import configuration.Credentials;
 class Main{
 	public static void main(String args[]){
 		for (int i = 0; i < 60; ++i){
-			Connection conn = null;
-			try{
-				final String exampleName = "CorrectWay ";
-				System.out.println(exampleName);
-				System.out.println("Opening the connection");
-				conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password);
-				System.out.println("Connection opened");
+			final String exampleName = "CorrectWay ";
+			System.out.println(exampleName);
+			System.out.println("Opening the connection");
 
+			try (Connection conn = DriverManager.getConnection(Credentials.url, Credentials.user, Credentials.password)){
+				System.out.println("Autocloseable Connection opened");
+				java.lang.Thread.sleep(1000);
 				assert null != conn: "conn is null";
 				conn.setAutoCommit(false);
-				String sql = "INSERT INTO TEST_INSERT (id, description) " +
+				final String sql = "INSERT INTO TEST_INSERT (id, description) " +
 					"VALUES ((select nvl (max(id), 0) + 1 from TEST_INSERT), ? || (select nvl (max(id), 0) + 1 from TEST_INSERT))";
-				PreparedStatement statement = conn.prepareStatement (sql);
-				statement.setString (1, exampleName);
-				System.out.println("insertSql: " + sql);
-				statement.executeUpdate();
-				statement.close();
-				System.out.println("committing");
-				conn.commit ();
-				System.out.println("committed");
-				System.out.println("Closing the connection");
-				conn.close (); // CLOSE the connection or you'll have SESSIONS_PER_USER error
-				System.out.println("Connection closed");
-				java.lang.Thread.sleep(1000);
-			} catch (SQLException e) {
-				System.err.format("SQL State: %s - %s\n", e.getSQLState(), e.getMessage());
-				try{
-					if(conn!=null){
-						System.err.format("rolling back\n");
-						conn.rollback();
-						conn.close (); // CLOSE the connection or you'll have SESSIONS_PER_USER error
-					}
-				}catch(SQLException se2){
-					System.err.format("SQL State se2: %s - %s\n", se2.getSQLState(), se2.getMessage());
-					se2.printStackTrace();
+				try (PreparedStatement statement = conn.prepareStatement (sql)){
+					System.out.println("Autocloseable PreparedStatement opened");
+					statement.setString (1, exampleName);
+					System.out.println("insertSql: " + conn.nativeSQL (sql));
+					statement.executeUpdate();
+					conn.commit ();
 				}
-			} catch (Exception e) {
+				catch (SQLException e){
+					System.err.format("inner SQL State: %s - %s\n", e.getSQLState(), e.getMessage());
+					// from https://docs.oracle.com/javase/7/docs/api/java/sql/Connection.html#close()
+					// It is strongly recommended that an application explicitly commits or rolls back an active transaction prior to calling the close method. If the close method is called and there is an active transaction, the results are implementation-defined.
+					conn.rollback();
+					e.printStackTrace();
+				}
+				catch (Exception e){
+					System.err.format("inner State: - %s\n", e.getMessage());
+					// from https://docs.oracle.com/javase/7/docs/api/java/sql/Connection.html#close()
+					// It is strongly recommended that an application explicitly commits or rolls back an active transaction prior to calling the close method. If the close method is called and there is an active transaction, the results are implementation-defined.
+					conn.rollback();
+					e.printStackTrace();
+				}
+			}
+			catch (SQLException e){
+				System.err.format("out SQL State: %s - %s\n", e.getSQLState(), e.getMessage());
+				e.printStackTrace();
+			}
+			catch (Exception e){
+				System.err.format("out State: - %s\n", e.getMessage());
 				e.printStackTrace();
 			}
 		}
